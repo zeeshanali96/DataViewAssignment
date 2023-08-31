@@ -5,6 +5,12 @@ import { useEffect, useState } from "react";
 import DataInTable from "./components/DataInTable";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import { listings } from "./MockData/MockData";
+
+const mock = new MockAdapter(axios);
+
+mock.onGet("/api/listings").reply(200, { listings });
 
 function App() {
   const [handleDisplay, setHandleDisplay] = useState(undefined);
@@ -17,9 +23,9 @@ function App() {
     const getData = async () => {
       try {
         await axios
-          .get("http://localhost:8000/listings")
+          .get("/api/listings")
           .then((result) => {
-            setData(result.data);
+            setData(result.data.listings);
           })
           .catch((error) => console.log(error));
       } catch {
